@@ -192,6 +192,73 @@ a {
   line-height: 1.06;
 }
 
+.game-section {
+  color: #fffaf0;
+  background: #15201e;
+}
+
+.game-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+  gap: clamp(28px, 6vw, 72px);
+  align-items: center;
+}
+
+.game-copy p:not(.eyebrow) {
+  max-width: 640px;
+  margin: 22px 0 0;
+  color: rgba(255, 250, 240, 0.76);
+  font-size: 1.1rem;
+}
+
+.control-panel {
+  padding: 26px;
+  border: 1px solid rgba(255, 250, 240, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 250, 240, 0.08);
+}
+
+.control-label {
+  display: block;
+  margin-bottom: 16px;
+  color: #f0b45d;
+  font-family: "Inter", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.key-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(44px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+kbd {
+  display: grid;
+  min-height: 54px;
+  place-items: center;
+  border: 1px solid rgba(255, 250, 240, 0.24);
+  border-bottom-width: 4px;
+  border-radius: 8px;
+  color: #111716;
+  background: #fffaf0;
+  font-family: "Inter", sans-serif;
+  font-size: 1.28rem;
+  font-weight: 800;
+}
+
+.control-panel p {
+  margin: 0;
+  color: rgba(255, 250, 240, 0.74);
+}
+
+.play-button {
+  width: 100%;
+  margin-top: 22px;
+}
+
 .work-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -272,8 +339,13 @@ a {
   }
 
   .section-heading,
+  .game-panel,
   .split-section {
     display: block;
+  }
+
+  .control-panel {
+    margin-top: 30px;
   }
 
   .work-grid {
