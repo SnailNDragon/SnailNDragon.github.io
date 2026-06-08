@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">SnailNDragon hero artwork</title>
+  <desc id="desc">A fantasy technology workspace with shell and dragon inspired light trails.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#111716"/>
+      <stop offset="0.48" stop-color="#173736"/>
+      <stop offset="1" stop-color="#6f4d25"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="68%" cy="42%" r="48%">
+      <stop offset="0" stop-color="#f2b85f" stop-opacity="0.85"/>
+      <stop offset="0.45" stop-color="#0d7c7c" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#111716" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+  <g opacity="0.28" filter="url(#soft)">
+    <ellipse cx="1040" cy="340" rx="300" ry="150" fill="#f0b45d"/>
+    <ellipse cx="760" cy="520" rx="420" ry="190" fill="#0d7c7c"/>
+  </g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1150 190c-220 6-390 122-412 278-18 128 80 229 215 211 104-14 174-95 161-174-11-64-76-101-144-78-53 18-81 70-61 112 17 35 64 45 96 20" stroke="#f2b85f" stroke-width="18" opacity="0.84"/>
+    <path d="M1315 572c-135-74-216-181-244-323 92 62 162 130 209 204 49-82 112-146 189-193-22 136-74 241-154 312Z" stroke="#9ed9cf" stroke-width="10" opacity="0.58"/>
+    <path d="M500 696c160-54 274-147 342-280 57 139 165 229 326 270" stroke="#fff2d8" stroke-width="7" opacity="0.46"/>
+    <path d="M210 655c210-74 410-88 599-43 221 53 414 35 579-54" stroke="#0fb0a5" stroke-width="6" opacity="0.5"/>
+  </g>
+  <g opacity="0.72">
+    <rect x="820" y="616" width="360" height="24" rx="12" fill="#f0b45d"/>
+    <rect x="880" y="660" width="520" height="18" rx="9" fill="#9ed9cf"/>
+    <rect x="640" y="704" width="390" height="16" rx="8" fill="#fff2d8" opacity="0.72"/>
+  </g>
+  <g opacity="0.22" stroke="#fff2d8" stroke-width="2">
+    <path d="M920 145v650M1040 130v660M1160 160v600M1280 215v475"/>
+    <path d="M760 245h650M695 360h710M650 475h660M710 590h560"/>
+  </g>
+  <rect width="760" height="900" fill="url(#sky)" opacity="0.68"/>
+</svg>
