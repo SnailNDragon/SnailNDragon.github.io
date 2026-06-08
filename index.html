@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SnailNDragon의 작업과 실험을 소개하는 개인 웹페이지입니다.">
+  <meta property="og:title" content="SnailNDragon">
+  <meta property="og:description" content="게임, 도구, 웹 실험을 기록하는 작은 작업실.">
+  <meta property="og:image" content="assets/hero.svg">
+  <title>SnailNDragon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header" aria-label="Main navigation">
+    <a class="brand" href="#top" aria-label="SnailNDragon home">SnailNDragon</a>
+    <nav class="nav-links" aria-label="Site sections">
+      <a href="#work">Work</a>
+      <a href="#notes">Notes</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <img class="hero-image" src="assets/hero.svg" alt="SnailNDragon을 상징하는 판타지 기술 작업실 일러스트">
+      <div class="hero-shade"></div>
+      <div class="hero-content">
+        <p class="eyebrow">Game dev · Web experiments · Tools</p>
+        <h1 id="hero-title">SnailNDragon</h1>
+        <p class="hero-copy">느리게 쌓고, 선명하게 완성하는 개인 작업실입니다. 게임과 웹, 작은 도구들을 만들고 기록합니다.</p>
+        <div class="hero-actions" aria-label="Primary links">
+          <a class="button primary" href="#work">작업 보기</a>
+          <a class="button ghost" href="https://github.com/SnailNDragon" rel="noreferrer">GitHub</a>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#work" aria-label="Scroll to work">↓</a>
+    </section>
+
+    <section id="work" class="section work-section" aria-labelledby="work-title">
+      <div class="section-heading">
+        <p class="eyebrow">Selected work</p>
+        <h2 id="work-title">최근 만들고 있는 것들</h2>
+      </div>
+      <div class="work-grid">
+        <article class="work-card">
+          <span class="card-kicker">Unity</span>
+          <h3>Elevator Manager</h3>
+          <p>플레이 흐름과 빌드 안정성을 다듬는 관리형 게임 프로젝트입니다.</p>
+        </article>
+        <article class="work-card">
+          <span class="card-kicker">Web</span>
+          <h3>GitHub Pages</h3>
+          <p>개인 작업과 업데이트를 빠르게 공유하기 위한 정적 웹사이트입니다.</p>
+        </article>
+        <article class="work-card">
+          <span class="card-kicker">Tools</span>
+          <h3>작업 자동화</h3>
+          <p>반복되는 테스트, 빌드, 정리를 줄이는 작은 도구들을 실험합니다.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="notes" class="section split-section" aria-labelledby="notes-title">
+      <div>
+        <p class="eyebrow">Notes</p>
+        <h2 id="notes-title">기록은 짧게, 방향은 분명하게.</h2>
+      </div>
+      <p>여기는 앞으로 개발 일지, 출시 노트, 실험 결과를 쌓아갈 공간입니다. 완성된 것뿐 아니라 만드는 과정에서 배운 점도 함께 남길 수 있습니다.</p>
+    </section>
+
+    <section id="contact" class="section contact-section" aria-labelledby="contact-title">
+      <p class="eyebrow">Contact</p>
+      <h2 id="contact-title">프로젝트와 기록은 GitHub에서 이어집니다.</h2>
+      <a class="button primary" href="https://github.com/SnailNDragon" rel="noreferrer">GitHub 방문</a>
+    </section>
+  </main>
+</body>
+</html>
