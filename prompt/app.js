@@ -166,17 +166,18 @@ async function analyzeImage() {
   try {
     const captioner = await getCaptioner();
     loadingTitle.textContent = "이미지를 읽고 있습니다";
-    loadingText.textContent = "화면에 보이는 주요 대상과 장면을 영어로 묘사합니다.";
+    loadingText.textContent = "주요 대상과 실제 픽셀의 색상, 밝기, 구도를 확인하고 있습니다.";
     progressBar.style.width = "88%";
 
-    // Decode the selected file into fresh pixel data for every run. Passing a
-    // reusable blob URL can cause URL-based image caches to return old pixels.
     const inputImage = await RawImage.fromBlob(analyzedFile);
-    const output = await captioner(inputImage, {
-      max_new_tokens: 72,
-      num_beams: 4,
-      repetition_penalty: 1.15
-    });
+    const [output, visualDetails] = await Promise.all([
+      captioner(inputImage, {
+        max_new_tokens: 72,
+        num_beams: 4,
+        repetition_penalty: 1.15
+      }),
+      describeVisualProperties(analyzedFile)
+    ]);
 
     if (analyzedRevision !== imageRevision || analyzedFile !== currentFile) {
       return;
@@ -187,7 +188,9 @@ async function analyzeImage() {
       throw new Error("The image caption model returned no text.");
     }
 
-    promptText.dataset.caption = normalizeCaption(rawCaption);
+    promptText.dataset.caption = normalizeCaption(
+      mergeVisualDetails(rawCaption, visualDetails)
+    );
     refreshFormattedPrompt();
     loadingState.hidden = true;
     promptText.hidden = false;
@@ -366,4 +369,89 @@ function mimeExtension(type) {
   }
 
   return "png";
+}
+
+async function describeVisualProperties(file) {
+  const bitmap = await createImageBitmap(file);
+  const sourceWidth = bitmap.width;
+  const sourceHeight = bitmap.height;
+  const canvas = document.createElement("canvas");
+  const sampleSize = 48;
+  canvas.width = sampleSize;
+  canvas.height = sampleSize;
+  const context = canvas.getContext("2d", { willReadFrequently: true });
+  context.drawImage(bitmap, 0, 0, sampleSize, sampleSize);
+  bitmap.close?.();
+
+  const pixels = context.getImageData(0, 0, sampleSize, sampleSize).data;
+  const colorCounts = new Map();
+  let brightnessTotal = 0;
+  let opaquePixels = 0;
+
+  for (let index = 0; index < pixels.length; index += 16) {
+    if (pixels[index + 3] < 32) {
+      continue;
+    }
+
+    const red = pixels[index];
+    const green = pixels[index + 1];
+    const blue = pixels[index + 2];
+    brightnessTotal += (red * 0.299) + (green * 0.587) + (blue * 0.114);
+    opaquePixels += 1;
+    const color = colorName(red, green, blue);
+    colorCounts.set(color, (colorCounts.get(color) || 0) + 1);
+  }
+
+  const colors = [...colorCounts.entries()]
+    .sort((left, right) => right[1] - left[1])
+    .slice(0, 3)
+    .map(([color]) => color);
+  const brightness = opaquePixels ? brightnessTotal / opaquePixels : 128;
+
+  return {
+    colors,
+    lighting: brightness < 78 ? "dark" : brightness > 184 ? "bright" : "balanced",
+    orientation: sourceWidth > sourceHeight
+      ? "landscape"
+      : sourceHeight > sourceWidth
+        ? "portrait"
+        : "square"
+  };
+}
+
+function mergeVisualDetails(caption, details) {
+  const text = caption.replace(/[.]+$/, "");
+  const colorText = details.colors.length
+    ? `predominantly ${joinEnglish(details.colors)}`
+    : "";
+  const additions = [
+    colorText,
+    `${details.lighting} lighting`,
+    `${details.orientation} composition`
+  ].filter(Boolean);
+  return additions.length ? `${text}, ${additions.join(", ")}` : text;
+}
+
+function colorName(red, green, blue) {
+  const max = Math.max(red, green, blue);
+  const min = Math.min(red, green, blue);
+  const spread = max - min;
+  const brightness = (max + min) / 2;
+
+  if (brightness < 35) return "black";
+  if (brightness > 225 && spread < 28) return "white";
+  if (spread < 22) return brightness < 105 ? "dark gray" : brightness > 185 ? "light gray" : "gray";
+  if (red > green * 1.25 && red > blue * 1.25) return red > 175 && green > 85 ? "orange" : "red";
+  if (blue > red * 1.22 && blue > green * 1.12) return blue > 150 && red > 95 ? "purple" : "blue";
+  if (green > red * 1.16 && green > blue * 1.08) return green > 150 && red > 120 ? "yellow-green" : "green";
+  if (red > 160 && green > 135 && blue < 120) return "yellow";
+  if (red > 150 && blue > 130 && green < 145) return "pink";
+  if (red > 125 && green > 75 && blue < 75) return "brown";
+  return max === blue ? "blue" : max === green ? "green" : "warm red";
+}
+
+function joinEnglish(items) {
+  if (items.length <= 1) return items[0] || "";
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(", ")}, and ${items.at(-1)}`;
 }
