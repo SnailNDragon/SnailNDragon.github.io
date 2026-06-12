@@ -261,7 +261,7 @@ kbd {
 
 .work-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
 }
 
@@ -272,6 +272,16 @@ kbd {
   border-radius: 8px;
   background: var(--panel);
   box-shadow: 0 10px 30px rgba(17, 23, 22, 0.06);
+}
+
+a.work-card {
+  transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+a.work-card:hover {
+  border-color: rgba(13, 124, 124, 0.5);
+  box-shadow: 0 16px 36px rgba(17, 23, 22, 0.1);
+  transform: translateY(-3px);
 }
 
 .card-kicker {
