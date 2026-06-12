@@ -1,6 +1,7 @@
 import {
   env,
-  pipeline
+  pipeline,
+  RawImage
 } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1";
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
@@ -32,6 +33,7 @@ let currentFile = null;
 let currentImageUrl = "";
 let captionerPromise = null;
 let isAnalyzing = false;
+let imageRevision = 0;
 
 dropZone.addEventListener("click", () => {
   if (!currentFile) {
@@ -116,6 +118,7 @@ async function setImage(file) {
 
   resetImageUrl();
   currentFile = file;
+  imageRevision += 1;
   currentImageUrl = URL.createObjectURL(file);
   previewImage.src = currentImageUrl;
   emptyState.hidden = true;
@@ -131,6 +134,8 @@ async function analyzeImage() {
   }
 
   isAnalyzing = true;
+  const analyzedFile = currentFile;
+  const analyzedRevision = imageRevision;
   analyzeButton.disabled = true;
   copyButton.disabled = true;
   promptText.hidden = true;
@@ -146,11 +151,18 @@ async function analyzeImage() {
     loadingText.textContent = "화면에 보이는 주요 대상과 장면을 영어로 묘사합니다.";
     progressBar.style.width = "88%";
 
-    const output = await captioner(currentImageUrl, {
+    // Decode the selected file into fresh pixel data for every run. Passing a
+    // reusable blob URL can cause URL-based image caches to return old pixels.
+    const inputImage = await RawImage.fromBlob(analyzedFile);
+    const output = await captioner(inputImage, {
       max_new_tokens: 72,
       num_beams: 4,
       repetition_penalty: 1.15
     });
+
+    if (analyzedRevision !== imageRevision || analyzedFile !== currentFile) {
+      return;
+    }
 
     const rawCaption = output?.[0]?.generated_text?.trim();
     if (!rawCaption) {
@@ -269,6 +281,7 @@ function clearOutput() {
 
 function resetImage() {
   currentFile = null;
+  imageRevision += 1;
   fileInput.value = "";
   resetImageUrl();
   previewImage.removeAttribute("src");
