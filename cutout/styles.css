@@ -249,6 +249,124 @@ figcaption {
   object-fit: contain;
 }
 
+#resultCanvas {
+  display: block;
+  max-width: 100%;
+  max-height: 470px;
+  width: auto;
+  height: auto;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+#resultCanvas[hidden] {
+  display: none;
+}
+
+.edit-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 18px;
+  border-top: 1px solid var(--line);
+  background: #f7f9f7;
+}
+
+.edit-toolbar[hidden] {
+  display: none;
+}
+
+.edit-help {
+  min-width: 230px;
+}
+
+.edit-help strong,
+.edit-help span {
+  display: block;
+}
+
+.edit-help strong {
+  font-size: 0.86rem;
+}
+
+.edit-help span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.tool-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mode-group {
+  display: flex;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.mode-button,
+.tool-button,
+.icon-button {
+  min-height: 36px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.mode-button {
+  padding: 0 11px;
+}
+
+.mode-button.is-active {
+  color: #fff;
+  background: var(--deep);
+}
+
+.tool-button,
+.icon-button {
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.tool-button {
+  padding: 0 12px;
+}
+
+.icon-button {
+  width: 36px;
+  padding: 0;
+  font-size: 1.2rem;
+}
+
+.icon-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.brush-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.brush-control input {
+  width: 92px;
+  accent-color: var(--deep);
+}
+
 .processing-state {
   position: absolute;
   inset: 0;
@@ -451,6 +569,38 @@ footer a {
   .image-stage img {
     min-height: 360px;
     height: 360px;
+  }
+
+  #resultCanvas {
+    min-height: 0;
+    height: auto;
+    max-height: 360px;
+  }
+
+  .edit-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .tool-controls {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .mode-group {
+    width: 100%;
+  }
+
+  .mode-button {
+    flex: 1;
+  }
+
+  .brush-control {
+    flex: 1;
+  }
+
+  .brush-control input {
+    flex: 1;
   }
 
   .action-bar {
