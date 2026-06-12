@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="이미지를 분석해 영어 묘사 프롬프트를 만드는 브라우저 도구입니다.">
+  <title>Image Prompt Writer | SnailNDragon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <a class="brand" href="../">SnailNDragon</a>
+    <span class="product-name">Image Prompt Writer</span>
+    <span class="privacy-note">이미지는 기기 안에서 분석됩니다</span>
+  </header>
+
+  <main>
+    <section class="intro">
+      <p class="eyebrow">Image to English Prompt</p>
+      <h1>이미지를 보고,<br>영어 프롬프트로.</h1>
+      <p>이미지를 첨부하거나 클립보드에서 붙여넣으면 화면에 보이는 내용을 영어 문장으로 묘사합니다.</p>
+    </section>
+
+    <section class="tool-shell" aria-label="이미지 영어 프롬프트 생성기">
+      <div class="input-column">
+        <div id="dropZone" class="drop-zone" tabindex="0" role="button">
+          <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+          <div id="emptyState" class="empty-state">
+            <span class="upload-icon" aria-hidden="true">+</span>
+            <strong>이미지를 놓거나 붙여넣으세요</strong>
+            <span>클릭해서 파일을 선택할 수도 있습니다</span>
+            <small>PNG, JPG, WEBP · Ctrl+V 지원 · 최대 25MB</small>
+          </div>
+          <div id="previewState" class="preview-state" hidden>
+            <img id="previewImage" alt="분석할 이미지 미리보기">
+            <button id="removeButton" class="remove-button" type="button" aria-label="선택한 이미지 제거" title="이미지 제거">×</button>
+          </div>
+        </div>
+
+        <div class="settings">
+          <label>
+            <span>프롬프트 용도</span>
+            <select id="promptMode">
+              <option value="faithful">정확한 이미지 묘사</option>
+              <option value="generation">이미지 생성용</option>
+              <option value="game">게임 에셋 참고용</option>
+            </select>
+          </label>
+          <label>
+            <span>표현 방식</span>
+            <select id="detailMode">
+              <option value="natural">자연스러운 한 문장</option>
+              <option value="compact">간결한 키워드형</option>
+              <option value="detailed">상세 묘사형</option>
+            </select>
+          </label>
+        </div>
+
+        <button id="analyzeButton" class="analyze-button" type="button" disabled>
+          영어 프롬프트 만들기
+        </button>
+      </div>
+
+      <div class="output-column">
+        <div class="output-heading">
+          <div>
+            <span class="section-label">Generated Prompt</span>
+            <h2>English description</h2>
+          </div>
+          <button id="copyButton" class="copy-button" type="button" disabled>복사</button>
+        </div>
+
+        <div id="outputBox" class="output-box">
+          <p id="placeholderText">이미지를 선택하면 영어 프롬프트가 여기에 표시됩니다.</p>
+          <p id="promptText" hidden></p>
+          <div id="loadingState" class="loading-state" hidden>
+            <div class="spinner" aria-hidden="true"></div>
+            <strong id="loadingTitle">이미지를 분석하고 있습니다</strong>
+            <span id="loadingText">첫 실행은 AI 모델 다운로드로 시간이 더 걸릴 수 있습니다.</span>
+            <div class="progress-track">
+              <div id="progressBar" class="progress-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="output-footer">
+          <span id="statusText">모델은 필요할 때 브라우저에 한 번만 내려받습니다.</span>
+          <button id="clearButton" class="text-button" type="button">내용 지우기</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="tips" aria-label="사용 안내">
+      <div>
+        <strong>붙여넣기</strong>
+        <span>화면 캡처나 복사한 이미지를 Ctrl+V로 바로 입력할 수 있습니다.</span>
+      </div>
+      <div>
+        <strong>영어 출력</strong>
+        <span>분석 결과는 이미지 생성 도구에 넣기 쉬운 영어로 정리됩니다.</span>
+      </div>
+      <div>
+        <strong>로컬 분석</strong>
+        <span>선택한 이미지는 별도의 이미지 저장 서버로 업로드하지 않습니다.</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a href="../">홈으로 돌아가기</a>
+    <span>Powered by Transformers.js and Hugging Face</span>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
