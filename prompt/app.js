@@ -51,7 +51,7 @@ dropZone.addEventListener("keydown", (event) => {
 fileInput.addEventListener("change", () => {
   const [file] = fileInput.files;
   if (file) {
-    setImage(file);
+    setImage(file, "file");
   }
 });
 
@@ -72,16 +72,16 @@ for (const eventName of ["dragleave", "drop"]) {
 dropZone.addEventListener("drop", (event) => {
   const [file] = event.dataTransfer.files;
   if (file) {
-    setImage(file);
+    setImage(file, "drop");
   }
 });
 
-window.addEventListener("paste", (event) => {
+window.addEventListener("paste", async (event) => {
   const imageItem = [...event.clipboardData.items].find((item) => item.type.startsWith("image/"));
   const file = imageItem?.getAsFile();
   if (file) {
     event.preventDefault();
-    setImage(file);
+    await setImage(file, "clipboard");
   }
 });
 
@@ -109,23 +109,41 @@ copyButton.addEventListener("click", async () => {
   }, 1300);
 });
 
-async function setImage(file) {
+async function setImage(file, source) {
   const error = validateFile(file);
   if (error) {
     showInputError(error);
     return;
   }
 
+  const selectionRevision = ++imageRevision;
+  const bytes = await file.arrayBuffer();
+  if (selectionRevision !== imageRevision) {
+    return;
+  }
+
+  const extension = mimeExtension(file.type);
+  const sourceName = source === "clipboard"
+    ? `clipboard-${Date.now()}.${extension}`
+    : file.name;
+  const snapshot = new File([bytes], sourceName, {
+    type: file.type,
+    lastModified: Date.now()
+  });
+  const fingerprint = await createFingerprint(bytes);
+  if (selectionRevision !== imageRevision) {
+    return;
+  }
+
   resetImageUrl();
-  currentFile = file;
-  imageRevision += 1;
-  currentImageUrl = URL.createObjectURL(file);
+  currentFile = snapshot;
+  currentImageUrl = URL.createObjectURL(snapshot);
   previewImage.src = currentImageUrl;
   emptyState.hidden = true;
   previewState.hidden = false;
   analyzeButton.disabled = false;
   clearOutput();
-  statusText.textContent = `${file.name} · ${formatBytes(file.size)}`;
+  statusText.textContent = `${sourceName} · ${formatBytes(snapshot.size)} · ID ${fingerprint}`;
 }
 
 async function analyzeImage() {
@@ -327,4 +345,25 @@ function formatBytes(bytes) {
   }
 
   return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
+}
+
+async function createFingerprint(bytes) {
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return [...new Uint8Array(digest)]
+    .slice(0, 4)
+    .map((value) => value.toString(16).padStart(2, "0"))
+    .join("")
+    .toUpperCase();
+}
+
+function mimeExtension(type) {
+  if (type === "image/jpeg") {
+    return "jpg";
+  }
+
+  if (type === "image/webp") {
+    return "webp";
+  }
+
+  return "png";
 }
